@@ -38,10 +38,10 @@
 //! Find the system library named `foo`, with minimum version 1.2.3:
 //!
 //! ```no_run
-//! extern crate pkg_config;
+//! extern crate ya_pkg_config;
 //!
 //! fn main() {
-//!     pkg_config::Config::new().atleast_version("1.2.3").probe("foo").unwrap();
+//!     ya_pkg_config::Config::new().atleast_version("1.2.3").probe("foo").unwrap();
 //! }
 //! ```
 //!
@@ -49,20 +49,20 @@
 //! recommended):
 //!
 //! ```no_run
-//! extern crate pkg_config;
+//! extern crate ya_pkg_config;
 //!
 //! fn main() {
-//!     pkg_config::probe_library("foo").unwrap();
+//!     ya_pkg_config::probe_library("foo").unwrap();
 //! }
 //! ```
 //!
 //! Configure how library `foo` is linked to.
 //!
 //! ```no_run
-//! extern crate pkg_config;
+//! extern crate ya_pkg_config;
 //!
 //! fn main() {
-//!     pkg_config::Config::new().atleast_version("1.2.3").statik(true).probe("foo").unwrap();
+//!     ya_pkg_config::Config::new().atleast_version("1.2.3").statik(true).probe("foo").unwrap();
 //! }
 //! ```
 

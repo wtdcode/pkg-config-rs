@@ -1,8 +1,8 @@
-extern crate pkg_config;
+extern crate ya_pkg_config;
 #[macro_use]
 extern crate lazy_static;
 
-use pkg_config::Error;
+use ya_pkg_config::Error;
 use std::env;
 use std::path::PathBuf;
 use std::sync::Mutex;
@@ -30,8 +30,8 @@ fn reset() {
     );
 }
 
-fn find(name: &str) -> Result<pkg_config::Library, Error> {
-    pkg_config::probe_library(name)
+fn find(name: &str) -> Result<ya_pkg_config::Library, Error> {
+    ya_pkg_config::probe_library(name)
 }
 
 #[test]
@@ -144,7 +144,7 @@ fn framework() {
 fn get_variable() {
     let _g = LOCK.lock();
     reset();
-    let prefix = pkg_config::get_variable("foo", "prefix").unwrap();
+    let prefix = ya_pkg_config::get_variable("foo", "prefix").unwrap();
     assert_eq!(prefix, "/usr");
 }
 
@@ -159,7 +159,7 @@ fn version() {
 fn atleast_version_ok() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .atleast_version("3.10")
         .probe("foo")
         .unwrap();
@@ -170,7 +170,7 @@ fn atleast_version_ok() {
 fn atleast_version_ng() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .atleast_version("3.11")
         .probe("foo")
         .unwrap();
@@ -180,7 +180,7 @@ fn atleast_version_ng() {
 fn exactly_version_ok() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .exactly_version("3.10.0.SVN")
         .probe("foo")
         .unwrap();
@@ -191,7 +191,7 @@ fn exactly_version_ok() {
 fn exactly_version_ng() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .exactly_version("3.10.0")
         .probe("foo")
         .unwrap();
@@ -201,7 +201,7 @@ fn exactly_version_ng() {
 fn range_version_range_ok() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version("4.2.0".."4.4.0")
         .probe("escape")
         .unwrap();
@@ -212,7 +212,7 @@ fn range_version_range_ok() {
 fn range_version_range_ng() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version("4.0.0".."4.2.0")
         .probe("escape")
         .unwrap();
@@ -222,7 +222,7 @@ fn range_version_range_ng() {
 fn range_version_range_inclusive_ok() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version("4.0.0"..="4.2.0")
         .probe("escape")
         .unwrap();
@@ -233,7 +233,7 @@ fn range_version_range_inclusive_ok() {
 fn range_version_range_inclusive_ng() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version("3.8.0"..="4.0.0")
         .probe("escape")
         .unwrap();
@@ -243,7 +243,7 @@ fn range_version_range_inclusive_ng() {
 fn range_version_range_from_ok() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version("4.0.0"..)
         .probe("escape")
         .unwrap();
@@ -254,7 +254,7 @@ fn range_version_range_from_ok() {
 fn range_version_range_from_ng() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version("4.4.0"..)
         .probe("escape")
         .unwrap();
@@ -264,7 +264,7 @@ fn range_version_range_from_ng() {
 fn range_version_range_to_ok() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version(.."4.4.0")
         .probe("escape")
         .unwrap();
@@ -275,7 +275,7 @@ fn range_version_range_to_ok() {
 fn range_version_range_to_ng() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version(.."4.2.0")
         .probe("escape")
         .unwrap();
@@ -285,7 +285,7 @@ fn range_version_range_to_ng() {
 fn range_version_range_to_inclusive_ok() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version(..="4.2.0")
         .probe("escape")
         .unwrap();
@@ -296,7 +296,7 @@ fn range_version_range_to_inclusive_ok() {
 fn range_version_range_to_inclusive_ng() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version(..="4.0.0")
         .probe("escape")
         .unwrap();
@@ -306,7 +306,7 @@ fn range_version_range_to_inclusive_ng() {
 fn range_version_full() {
     let _g = LOCK.lock();
     reset();
-    pkg_config::Config::new()
+    ya_pkg_config::Config::new()
         .range_version(..)
         .probe("escape")
         .unwrap();

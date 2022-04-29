@@ -1,4 +1,6 @@
-# pkg-config-rs
+# Yet another pkg-config-rs
+
+This fork exists to solve the [static linkage issue](https://github.com/rust-lang/pkg-config-rs/pull/37).
 
 [![Build Status](https://github.com/rust-lang/pkg-config-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/rust-lang/pkg-config-rs/actions)
 [![Rust](https://img.shields.io/badge/rust-1.30%2B-blue.svg?maxAge=3600)](https://github.com/rust-lang/pkg-config-rs/)
@@ -20,10 +22,10 @@ This library requires Rust 1.30+.
 Find the system library named `foo`, with minimum version 1.2.3:
 
 ```rust
-extern crate pkg_config;
+extern crate ya_pkg_config;
 
 fn main() {
-    pkg_config::Config::new().atleast_version("1.2.3").probe("foo").unwrap();
+    ya_pkg_config::Config::new().atleast_version("1.2.3").probe("foo").unwrap();
 }
 ```
 
@@ -31,10 +33,10 @@ Find the system library named `foo`, with no version requirement (not
 recommended):
 
 ```rust
-extern crate pkg_config;
+extern crate ya_pkg_config;
 
 fn main() {
-    pkg_config::probe_library("foo").unwrap();
+    ya_pkg_config::probe_library("foo").unwrap();
 }
 ```
 
