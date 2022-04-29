@@ -575,25 +575,6 @@ impl Library {
             }
         }
 
-        let system_roots = if cfg!(target_os = "macos") {
-            vec![PathBuf::from("/Library"), PathBuf::from("/System")]
-        } else {
-            let sysroot = config
-                .env_var_os("PKG_CONFIG_SYSROOT_DIR")
-                .or_else(|| config.env_var_os("SYSROOT"))
-                .map(PathBuf::from);
-
-            if cfg!(target_os = "windows") {
-                if let Some(sysroot) = sysroot {
-                    vec![sysroot]
-                } else {
-                    vec![]
-                }
-            } else {
-                vec![sysroot.unwrap_or_else(|| PathBuf::from("/usr"))]
-            }
-        };
-
         let mut dirs = Vec::new();
         let statik = config.is_static(name);
 
@@ -626,7 +607,7 @@ impl Library {
                         continue;
                     }
 
-                    if statik && is_static_available(val, &system_roots, &dirs) {
+                    if statik {
                         let meta = format!("rustc-link-lib=static={}", val);
                         config.print_metadata(&meta);
                     } else {
@@ -712,13 +693,14 @@ fn envify(name: &str) -> String {
 }
 
 /// System libraries should only be linked dynamically
-fn is_static_available(name: &str, system_roots: &[PathBuf], dirs: &[PathBuf]) -> bool {
-    let libname = format!("lib{}.a", name);
+/// Really?
+// fn is_static_available(name: &str, system_roots: &[PathBuf], dirs: &[PathBuf]) -> bool {
+//     let libname = format!("lib{}.a", name);
 
-    dirs.iter().any(|dir| {
-        !system_roots.iter().any(|sys| dir.starts_with(sys)) && dir.join(&libname).exists()
-    })
-}
+//     dirs.iter().any(|dir| {
+//         !system_roots.iter().any(|sys| dir.starts_with(sys)) && dir.join(&libname).exists()
+//     })
+// }
 
 fn run(mut cmd: Command) -> Result<Vec<u8>, Error> {
     match cmd.output() {
@@ -818,17 +800,17 @@ fn system_library_mac_test() {
     }
 }
 
-#[test]
-#[cfg(target_os = "linux")]
-fn system_library_linux_test() {
-    assert!(!is_static_available(
-        "util",
-        &[PathBuf::from("/usr")],
-        &[PathBuf::from("/usr/lib/x86_64-linux-gnu")]
-    ));
-    assert!(!is_static_available(
-        "dialog",
-        &[PathBuf::from("/usr")],
-        &[PathBuf::from("/usr/lib")]
-    ));
-}
+// #[test]
+// #[cfg(target_os = "linux")]
+// fn system_library_linux_test() {
+//     assert!(!is_static_available(
+//         "util",
+//         &[PathBuf::from("/usr")],
+//         &[PathBuf::from("/usr/lib/x86_64-linux-gnu")]
+//     ));
+//     assert!(!is_static_available(
+//         "dialog",
+//         &[PathBuf::from("/usr")],
+//         &[PathBuf::from("/usr/lib")]
+//     ));
+// }
